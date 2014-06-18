@@ -1,6 +1,7 @@
 var http = require('http');
 var path = require('path');
 var async = require('async');
+var mongo = require('mongoskin');
 var socketio = require('socket.io');
 var express = require('express');
 
@@ -10,6 +11,10 @@ var io = socketio.listen(server);
 
 router.use(express.static(path.resolve(__dirname, 'client')));
 
+// Database Connection
+var db     = mongo.db('mongodb://nerd:dork@kahana.mongohq.com:10079/crunchy');
+var urls   = db.collection('urls');
+
 io.on('connection', function (socket) {
     socket.on('url:put', function (msg) {
       var text = String(msg || '');
@@ -18,16 +23,27 @@ io.on('connection', function (socket) {
         return;
 
       console.log('got text from client: ' + msg);
-      socket.emit('url:get', 'short version of ' + msg);
+      
+      // insert url to db
+      // id will be it's key, already indexed, made for small use case
+      urls.insert({url:msg}, function(err, record){
+          if (err) throw err;
+          socket.emit('url:get', record);
+      });
+      
     });
 });
 
-router.post('/crunch', function(req, res) {
-    var url = req.body;
-    console.log('Crunching url: ' + JSON.stringify(url));
+// Re-router for short url pings
+router.get('/:id', function(req, res) {
+    console.log(req.params.id);
+    urls.find({ _id: req.params.id }, function(err, record){
+        // Redirect to URL
+        res.redirect(record.url);
+    });
 });
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   var addr = server.address();
-  console.log("Chat server listening at", addr.address + ":" + addr.port);
+  console.log("Server listening at", addr.address + ":" + addr.port);
 });

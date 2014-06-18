@@ -1,5 +1,6 @@
 var ShrinkerForm = (function(){
     var socket = io.connect(),
+        customDomain = 'http://url-crunchy.herokuapp.com/',
         form = $('form'),
         submitBtn = $('#form-submit-btn'),
         client_url_field = $('#to_be_short_url'),
@@ -10,7 +11,11 @@ var ShrinkerForm = (function(){
     });
     
     socket.on('url:get', function (msg) {
-        server_url_field.text(msg);
+        var crunchedUrl = customDomain + msg[0]._id;
+        submitBtn.button('reset');
+        submitBtn
+            .attr('data-content', '<a href="'+crunchedUrl+'">'+crunchedUrl+'</a>')
+            .popover('show');
     });
     
     function send(url) {
@@ -21,6 +26,5 @@ var ShrinkerForm = (function(){
     form.submit(function(e){
         e.preventDefault();
         send(client_url_field.val());
-        submitBtn.button('reset');
     });
 })();
