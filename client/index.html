@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" ng-app>
+  <head>
+    <title>A URL Shortener</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="http://argyleink.com">Makes Ya URL</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="http://argyleink.com">Made By: Adam Argyle</a></li>
+                <li><a href="mailto:atom@argyleink.com">Contact</a></li>
+              </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Need to crunch an URL?</h1>
+            <p>That's all I do. You're at the right spot.</p>
+            <form role="form">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Paste your URL below, I'm hungry</label>
+                <input id="to_be_short_url" type="url" class="form-control" id="url_to_crunch" placeholder="http://www.fiftythree.com">
+              </div>
+              <button type="submit" id="form-submit-btn" data-loading-text="Crunching..." class="btn btn-primary">
+                Feed Me »
+              </button>
+            </form>
+        </div>
+        <h3 id="short_url"></h3>
+    </div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="/js/app.js"></script>
+  </body>
+</html>
